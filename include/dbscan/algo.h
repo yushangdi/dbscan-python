@@ -5,20 +5,21 @@
 #include "dbscan/shared.h"
 #include "dbscan/grid.h"
 #include "dbscan/coreBccp.h"
-// #include "dbscan/pbbs/gettime.h"
+#include "dbscan/pbbs/gettime.h"
 #include "dbscan/pbbs/parallel.h"
 #include "dbscan/pbbs/sampleSort.h"
 #include "dbscan/pbbs/unionFind.h"
 
-// #define VERBOSE
+#define VERBOSE
 
 template<int dim>
-int DBSCAN(intT n, floatT* PF, double epsilon, intT minPts, bool* coreFlagOut, intT* coreFlag, intT* cluster) {
+double DBSCAN(intT n, floatT* PF, double epsilon, intT minPts, bool* coreFlagOut, intT* coreFlag, intT* cluster) {
   typedef point<dim> pointT;
   typedef grid<dim, pointT> gridT;
   typedef cell<dim, pointT> cellT;
 
   point<dim>* PRead = (point<dim>*)PF;
+  timing timer; timer.start();
 
 #ifdef VERBOSE
   cout << "Input: " << n << " points, dimension " << dim << endl;
@@ -223,5 +224,7 @@ int DBSCAN(intT n, floatT* PF, double epsilon, intT minPts, bool* coreFlagOut, i
 #ifdef VERBOSE
   cout << "output-time = " << tt.stop() << endl;
 #endif
-  return 0;
+  double clustering_time = timer.stop();
+  cout << "time = " << clustering_time << endl;
+  return clustering_time;
 }

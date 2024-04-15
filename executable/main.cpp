@@ -18,8 +18,20 @@ int main(int argc, char* argv[]) {
   size_t p_minpts = P.getOptionIntValue("-minpts",1);
   double p_rho = P.getOptionDoubleValue("-rho",-1);
 
-  int dim = readHeader(iFile);
+  // int dim = readHeader(iFile);
+  int dim = P.getOptionIntValue("-dim",2);
+  std::cout << "dim " << dim << std::endl;
   _seq<double> PIn = readDoubleFromFile(iFile, dim);
+
+  std::cout << "n " << PIn.n << std::endl;
+
+  int ct = 0;
+  for (int i=0;i < PIn.n; ++ i){
+    if (PIn.A[i] != 0){ std::cout << PIn.A[i] << " "; ct++;}
+    if (ct > 100) break;
+  }
+  std::cout << std::endl;
+
 
   bool* coreFlag = new bool[PIn.n / dim];
   int* cluster = new int[PIn.n / dim];

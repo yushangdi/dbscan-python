@@ -20,17 +20,17 @@ static constexpr void constexpr_for(F&& f)
     }
 }
 
-extern "C" int DBSCAN(intT dim, intT n, floatT* PF, double epsilon, intT minPts, bool* coreFlag, intT* labels) {
-  auto coreFlag2 = newA(intT, n);
-  int error = 1; // didn't match number of dimensions
-  constexpr_for<DBSCAN_MIN_DIMS, DBSCAN_MAX_DIMS+1, 1>([&](auto i){
-    if (dim == i) {
-      error = DBSCAN<i>(n, PF, epsilon, minPts, coreFlag, coreFlag2, labels);
-      free(coreFlag2);
-    }
-  });
-  return error;
-}
+// extern "C" int DBSCAN(intT dim, intT n, floatT* PF, double epsilon, intT minPts, bool* coreFlag, intT* labels) {
+//   auto coreFlag2 = newA(intT, n);
+//   int error = 1; // didn't match number of dimensions
+//   constexpr_for<DBSCAN_MIN_DIMS, DBSCAN_MAX_DIMS+1, 1>([&](auto i){
+//     if (dim == i) {
+//       error = DBSCAN<i>(n, PF, epsilon, minPts, coreFlag, coreFlag2, labels);
+//       free(coreFlag2);
+//     }
+//   });
+//   return error;
+// }
 
 /*
 Equivalent to the following, but can be controlled via compile time flags
@@ -63,3 +63,16 @@ extern "C" int DBSCAN(intT dim, intT n, floatT* PF, double epsilon, intT minPts,
   return 0;
 }
 */
+
+extern "C" int DBSCAN(intT dim, intT n, floatT* PF, double epsilon, intT minPts, bool* coreFlag, intT* labels) {
+  auto coreFlag2 = newA(intT, n);
+  if (dim == 2) {DBSCAN<2>(n, PF, epsilon, minPts, coreFlag, coreFlag2, labels);}
+  else if (dim == 3) {DBSCAN<3>(n, PF, epsilon, minPts, coreFlag, coreFlag2, labels);}
+  else if (dim == 784) {DBSCAN<784>(n, PF, epsilon, minPts, coreFlag, coreFlag2, labels);}
+  else if (dim == 1024) {DBSCAN<1024>(n, PF, epsilon, minPts, coreFlag, coreFlag2, labels);}
+  else {
+    return 1;
+  }
+  free(coreFlag2);
+  return 0;
+}

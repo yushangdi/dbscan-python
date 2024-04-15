@@ -11,7 +11,7 @@ dimensions in the data.
 #endif
 
 #ifndef DBSCAN_MAX_DIMS
-#define DBSCAN_MAX_DIMS 20
+#define DBSCAN_MAX_DIMS 1024
 #endif
 
 
